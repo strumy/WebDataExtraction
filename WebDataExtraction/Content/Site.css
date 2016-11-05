@@ -1,0 +1,78 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/******************************Custom Styles*****************************************/
+
+.row-margin {
+    margin-top: 20px;
+}
+
+.form-block {
+  margin-bottom: 1rem;
+}
+
+table.search-table thead tr th {
+    font-size: 14px;
+    background-color: #add8e6;
+}
+
+table.search-table tbody tr td {
+    font-size: 14px;
+}
+
+.icon-space {
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+.icon-remove {
+    color: #ff0000;
+}
+
+.icon-edit {
+    color: #0000ff;
+}
+
+.icon-view {
+    color: #006400;
+}
+
+.form-custom {
+    font-size: 12px;
+    height: 30px;
+    padding: 4px 8px;
+}
+
+.warning-message {
+    font-size: 15px;
+}
+
+.bd-example {
+    position: relative;
+    padding: 1rem;
+    margin: 1rem -1rem;
+    border: solid #f7f7f9;
+    border-width: .2rem 0 0;
+}
