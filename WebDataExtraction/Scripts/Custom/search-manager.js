@@ -12,7 +12,7 @@
             async: true,
             success: function (data) {
                 var result = "";
-                var i = 0;
+                var i = 1;
                 var tableBody = $("#searchResultTable");
                 tableBody.html('');
 
@@ -31,20 +31,13 @@
                 } else {
                     $("#searchResultTable").show();
                     $.each(data,
-                        function(i, item) {
+                        function (i, item) {
+                            i = i + 1;
                             result += '<tr>' +
-                                '<td>' +
-                                i +
-                                '</td>' +
-                                '<td>' +
-                                item.Name +
-                                '</td>' +
-                                '<td>' +
-                                item.Address +
-                                '</td>' +
-                                '<td>' +
-                                item.Zipcode +
-                                '</td>' +
+                                '<td>' + i +'</td>' +
+                                '<td>' + item.Name + '</td>' +
+                                '<td>' + item.Address + '</td>' +
+                                '<td>' + item.Zipcode + '</td>' +
                                 '</tr>';
                         });
 
