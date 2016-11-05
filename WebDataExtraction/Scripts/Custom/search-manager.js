@@ -11,8 +11,7 @@
             contentType: "application/json; charset=utf-8",
             async: true,
             success: function (data) {
-                var result = "";
-                var i = 1;
+                var result = "";                
                 var tableBody = $("#searchResultTable");
                 tableBody.html('');
 
