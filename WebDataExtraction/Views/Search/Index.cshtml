@@ -17,15 +17,16 @@
                 <input type="text" class="form-control" id="location" placeholder="Location" required="required">
             </div>            
             <button type="submit" class="btn btn-success" id="submit">Search</button>
-            
+            <button type="button" class="btn btn-default" id="save">Save</button>
             <img id="loading" src="../../Content/images/ajax-loader.gif" alt="Loading..." style="display: none;" />
         </form>
     </div>
 </div>
 
 <div class="row row-margin">
-    <div class="col-lg-8 col-md-8 col-sm-12 co-xs-12 col-lg-offset-2 col-md-offset-2">        
+    <div class="col-lg-8 col-md-8 col-sm-12 co-xs-12 col-lg-offset-2 col-md-offset-2">
         <table class="table table-bordered table-condensed table-hover table-responsive search-table" id="searchResultTable"></table>
         <div id="message" style="display: none;">Sorry, we could not find any restaurent in the specified location.</div>
+        <div id="save-status" style="display: none;"></div>
     </div>
 </div>

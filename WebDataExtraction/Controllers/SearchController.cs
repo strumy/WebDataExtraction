@@ -19,5 +19,19 @@ namespace WebDataExtraction.Controllers
 
             return Json(restaurents, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public JsonResult Save(List<string> dataList)
+        {
+            int itemName = dataList.Count;
+            string message = "";
+
+            if (itemName > 0)
+            {
+                message = "Data Saved Successfully.";
+            }
+
+            return Json(message);
+        }
     }
 }
