@@ -1,5 +1,5 @@
-﻿$(document).ready(function () {
-    var searchResult = [];
+﻿var searchResult = [];
+$(document).ready(function () {
     $('#save-status').hide();
     $('#message').hide();
 
@@ -18,16 +18,17 @@
             data: JSON.stringify({
                 "item": $('#nameToken').val(),
                 "location": $('#location').val(),
-                "search-result": searchResult
+                "searchResult": [{ "1": "a", "2": "b", "3": "c" }, { "1": "a", "2": "b", "3": "c" }]
             }),
             contentType: "application/json; charset=utf-8",
             async: true,
             success: function (data) {
-                $('#save-status').html("Search results Saved successfully.");
+                $('#save-status').html(data.responseText);
                 $('#save-status').show();
             },
             error: function (xhr, status, exception) {
-                Console.log('Error Test: ' + exception + ', Status: ' + status);
+                alert(status);
+                alert(exception);                
             }
         });
     });
@@ -62,6 +63,7 @@
                     $('#message').show();
                 } else {
                     $("#searchResultTable").show();
+                    searchResult = [];
                     $.each(data,
                         function (i, item) {
                             i = i + 1;
@@ -77,7 +79,7 @@
 
                             searchResult.push({ name, address, zipcode });
                         });
-
+                    alert(searchResult);
                     result += '</tbody>';
                 }
 
