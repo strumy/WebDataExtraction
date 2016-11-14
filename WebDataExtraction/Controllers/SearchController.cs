@@ -6,20 +6,26 @@ using System.Web;
 using System.Web.Script.Serialization;
 using System;
 using System.IO;
+using WebDataExtraction.Context;
+using WebDataExtraction.Entity;
 
 namespace WebDataExtraction.Controllers
 {
     public class SearchController : Controller
-    {        
+    {
+        private SearchContext db = new SearchContext();
+
         public ActionResult Index()
-        {            
+        {
             return View();
         }
 
         [HttpGet]
         public JsonResult Get(string item, string location)
-        {            
+        {
             Scrapper.Scrapper scrapper = new Scrapper.Scrapper(item, location);
+            //List<Scrapper.Restaurant> restaurents = scrapper.GetResult();
+
             List<Scrapper.Restaurant> restaurents = new List<Restaurant>();
 
             Restaurant restaurant;
@@ -36,33 +42,41 @@ namespace WebDataExtraction.Controllers
         }
 
         [HttpPost]
-        public JsonResult Save(string item, string location, string searchResult)
+        public JsonResult Save(string item, string location, List<Restaurant> searchResult)
         {
-            /*
-            var jsonSerializer = new JavaScriptSerializer();
-            var jsonString = String.Empty;
-
-            context.Request.InputStream.Position = 0;
-            using (var inputStream = new StreamReader(context.Request.InputStream))
+            if (searchResult == null || item.Trim() == "" || location.Trim() == "")
             {
-                jsonString = inputStream.ReadToEnd();
+                return Json(new { success = false, responseText = "Data was NOT Saved. Restaurent Name, Location or Search data was empty." }, JsonRequestBehavior.AllowGet);
             }
 
-            var restaurentList = jsonSerializer.Deserialize<List<string>>(jsonString);*/
-
-            int len = 2;
-            if (searchResult != null)
+            try
             {
-                len = 1;
-            }                
+                SearchData searchData = new SearchData();
+                searchData.Name = item;
+                searchData.Location = location;
+                db.SearchDatas.Add(searchData);
 
+                foreach (var restaurent in searchResult)
+                {                        
+                    RestaurentData restaurentData = new RestaurentData();
+                    restaurentData.Name = restaurent.Name;
+                    restaurentData.Address = restaurent.Address;
+                    restaurentData.Zipcode = restaurent.Zipcode;
+                    restaurentData.SearchDataId = searchData.SearchDataId;
+                    db.RestaurentDatas.Add(restaurentData);                        
+                }
 
-            if (len > 0)
-            {                
-                return Json(new { success = true, responseText = "Data Saved Successfully." }, JsonRequestBehavior.AllowGet);
+                if (db.SaveChanges() > 0)
+                {
+                    return Json(new { success = true, responseText = "Data Saved Successfully." }, JsonRequestBehavior.AllowGet);
+                }
+                
+                return Json(new { success = false, responseText = "Data was NOT Saved Successfully." }, JsonRequestBehavior.AllowGet);
             }
-
-            return Json(new { success = false, responseText = "Data was NOT Saved Successfully." }, JsonRequestBehavior.AllowGet);
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

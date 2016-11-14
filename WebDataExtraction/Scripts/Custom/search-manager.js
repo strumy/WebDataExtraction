@@ -1,15 +1,15 @@
 ﻿var searchResult = [];
-$(document).ready(function () {
-    $('#save-status').hide();
+$(document).ready(function () {    
     $('#message').hide();
 
     $('#save').click(function (e) {
-
         if ($.isEmptyObject(searchResult)) {
-            $('#save-status').html("Unable to save. No search result found.");
-            $('#save-status').show();
+            $('#message-text').html("Unable to save. No search result found.");
+            $('#message').show();
             return false;
         }
+
+        $('#loading').show();
 
         $.ajax({
             url: '/Search/Save',
@@ -18,17 +18,18 @@ $(document).ready(function () {
             data: JSON.stringify({
                 "item": $('#nameToken').val(),
                 "location": $('#location').val(),
-                "searchResult": [{ "1": "a", "2": "b", "3": "c" }, { "1": "a", "2": "b", "3": "c" }]
+                "searchResult": searchResult
             }),
             contentType: "application/json; charset=utf-8",
             async: true,
             success: function (data) {
-                $('#save-status').html(data.responseText);
-                $('#save-status').show();
+                $('#loading').hide();
+                $('#message-text').html(data.responseText);
+                $('#message').show();
             },
             error: function (xhr, status, exception) {
-                alert(status);
-                alert(exception);                
+                $('#message-text').html("Error occured. Could not Save data.");
+                $('#message').show();                
             }
         });
     });
@@ -45,7 +46,8 @@ $(document).ready(function () {
             contentType: "application/json; charset=utf-8",
             async: true,
             success: function (data) {
-                var result = "";                
+                $('#message').hide();
+                var result = "";
                 var tableBody = $("#searchResultTable");
                 tableBody.html('');
 
@@ -60,7 +62,8 @@ $(document).ready(function () {
                     '<tbody id="tableBody">';
                 if ($.isEmptyObject(data)) {
                     $("#searchResultTable").hide();
-                    $('#message').show();
+                    $('#message-text').html("Sorry, we could not find any restaurent in the specified location.");
+                    $('#message').show();                    
                 } else {
                     $("#searchResultTable").show();
                     searchResult = [];
@@ -78,16 +81,16 @@ $(document).ready(function () {
                                 '</tr>';
 
                             searchResult.push({ name, address, zipcode });
-                        });
-                    alert(searchResult);
+                        });                    
                     result += '</tbody>';
                 }
 
                 tableBody.html(result);
                 $('#loading').hide();
             },
-            error: function (xhr, status, exception) {                
-                Console.log('Error Test: ' + exception + ', Status: ' + status);
+            error: function (xhr, status, exception) {
+                $('#message-text').html("Error occured. Could not retrieve data.");
+                $('#message').show();                
             }
         });
         return false;
