@@ -15,6 +15,6 @@ namespace WebDataExtraction.Entity
         [MaxLength(100)]
         public string Name { get; set; }
         public string Location { get; set; }
-        public virtual IEnumerable<RestaurentData> RestaurentDatas { get; set; }
+        public virtual ICollection<RestaurentData> RestaurentDatas { get; set; }
     }
 }

@@ -5,7 +5,9 @@ using Scrapper;
 using System.Web;
 using System.Web.Script.Serialization;
 using System;
+using System.Data.Entity;
 using System.IO;
+using System.Linq;
 using WebDataExtraction.Context;
 using WebDataExtraction.Entity;
 
@@ -77,6 +79,49 @@ namespace WebDataExtraction.Controllers
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        [HttpPost]
+        public JsonResult Import(string item, string location)
+        {
+            if (item.Trim() == "" || location.Trim() == "")
+            {
+                return Json(new { success = false, responseText = "Could not import data. Name or Location was empty." }, JsonRequestBehavior.AllowGet);
+            }                        
+
+            try
+            {
+                var searchDatas = db.SearchDatas.Where(s => s.Name == item && s.Location == location).Include(c => c.RestaurentDatas).FirstOrDefault();
+
+                if (searchDatas == null)
+                {
+                    return Json(new { success = false, responseText = "Could not import data. No data was found for your search criteria (name = " + item + " and location =" + location + ")." }, JsonRequestBehavior.AllowGet);
+                }
+
+                if (searchDatas.RestaurentDatas == null)
+                {
+                    return Json(new { success = false, responseText = "Could not import data. No data was found for your search criteria (name = " + item + " and location =" + location + ")." }, JsonRequestBehavior.AllowGet);
+                }
+
+                List<RestaurentData> restaurentDatas = new List<RestaurentData>();
+                List<Scrapper.Restaurant> restaurents = new List<Restaurant>();
+
+                Restaurant sRestaurant;
+
+                foreach (var restaurent in searchDatas.RestaurentDatas)
+                {
+                    sRestaurant = new Restaurant();
+                    sRestaurant.Name = restaurent.Name;
+                    sRestaurant.Address = restaurent.Address;
+                    sRestaurant.Zipcode = restaurent.Zipcode;
+                    restaurents.Add(sRestaurant);
+                }
+                return Json(restaurents, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);                
+            }            
         }
     }
 }
